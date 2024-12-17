@@ -13,6 +13,7 @@ import {
   closeDatabase,
 } from "~/config/mongodb.js";
 import { env } from "./config/environment";
+import { APIs_V1 } from "~/routes/v1/index.js";
 
 const START_SERVER = () => {
   const app = express();
@@ -20,11 +21,11 @@ const START_SERVER = () => {
   const hostname = "localhost";
   const port = 8017;
 
-  app.get("/", async (req, res) => {
-    // Test Absolute import mapOrder
-    console.log(await getDatabase().listCollections().toArray());
-    res.end("<h1>Hello World!</h1><hr>");
-  });
+  // Enable req.body data json
+  app.use(express.json());
+
+  // Use API v1
+  app.use("/v1", APIs_V1);
 
   app.listen(port, hostname, () => {
     // eslint-disable-next-line no-console
