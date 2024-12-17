@@ -14,6 +14,7 @@ import {
 } from "~/config/mongodb.js";
 import { env } from "./config/environment";
 import { APIs_V1 } from "~/routes/v1/index.js";
+import { errorHandlingMiddleware } from "./middlewares/errorHandlingMiddleware";
 
 const START_SERVER = () => {
   const app = express();
@@ -26,6 +27,9 @@ const START_SERVER = () => {
 
   // Use API v1
   app.use("/v1", APIs_V1);
+
+  // Middleware xử lý lỗi tập trung
+  app.use(errorHandlingMiddleware);
 
   app.listen(port, hostname, () => {
     // eslint-disable-next-line no-console

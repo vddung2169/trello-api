@@ -1,5 +1,6 @@
 import Joi from "joi";
 import { StatusCodes } from "http-status-codes";
+import ApiError from "~/utils/ApiError";
 
 const createNew = async (req, res, next) => {
   const correctConditions = Joi.object({
@@ -26,21 +27,20 @@ const createNew = async (req, res, next) => {
   });
 
   try {
-    console.log("Request body: ", req.body);
-
     await correctConditions.validateAsync(req.body, {
       // abortEarly: false - bắn ra được tất cả các lỗi validation (không dừng lại ở lỗi đầu tiên)
       abortEarly: false,
     });
-    // next();
 
-    res
-      .status(StatusCodes.CREATED)
-      .json({ message: "POST from Validation: API create new board" });
+    // Nếu không có lỗi thì chuyển sang middleware tiếp theo (Controller)
+    next();
   } catch (error) {
-    return res
-      .status(StatusCodes.UNPROCESSABLE_ENTITY)
-      .json({ error: new Error(error).message });
+    const errorMessage = new Error(error).message;
+    const customError = new ApiError(
+      StatusCodes.UNPROCESSABLE_ENTITY,
+      errorMessage
+    );
+    next(customError);
   }
 };
 
