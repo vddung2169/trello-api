@@ -13,4 +13,6 @@ export const env = {
   DATABASE_NAME: process.env.DATABASE_NAME,
   USERNAME_DB: process.env.USERNAMEDB,
   PASSWORD_DB: process.env.USERNAMEDB,
+
+  BUILD_MODE: process.env.BUILD_MODE,
 };
